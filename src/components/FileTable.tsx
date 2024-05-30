@@ -39,7 +39,7 @@ const FancyTable: React.FC = () => {
       <div className='py-8'>
         <div className='flex justify-between items-center'>
           <h2 className='text-2xl font-semibold leading-tight'>
-            Transaction Table
+            Top 20 files on Fileverse
           </h2>
           <div className='relative text-gray-600'>
             <span className='absolute inset-y-0 left-0 flex items-center pl-2'>
