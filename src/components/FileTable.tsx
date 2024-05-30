@@ -1,5 +1,5 @@
 // src/components/FancyTable.tsx
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Table,
   TableHeader,
@@ -19,7 +19,7 @@ const FancyTable: React.FC = () => {
     refetchInterval: 5000
   });
 
-  console.log(data, 'data');
+  const [searchQuery, setSearchQuery] = useState('');
 
   if (isLoading) {
     return (
@@ -33,6 +33,15 @@ const FancyTable: React.FC = () => {
     if (!address) return '';
     return address.slice(0, 15) + '...' + address.slice(address.length - 15);
   };
+
+  const filteredData = data.filter(
+    (file: any) =>
+      file.metadataIPFSHash.includes(searchQuery) ||
+      file.contentIPFSHash.includes(searchQuery) ||
+      file.portalAddress.includes(searchQuery) ||
+      file.fileId.includes(searchQuery) ||
+      file.transactionHash.includes(searchQuery)
+  );
 
   return (
     <div className='container mx-auto px-4 sm:px-8'>
@@ -59,6 +68,8 @@ const FancyTable: React.FC = () => {
               type='search'
               name='search'
               placeholder='Search'
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
               className='block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 sm:text-sm'
             />
           </div>
@@ -76,7 +87,7 @@ const FancyTable: React.FC = () => {
                 <TableColumn>Gnosis Scan Link of Txn Hash</TableColumn>
               </TableHeader>
               <TableBody>
-                {data.map((file: any, index: any) => (
+                {filteredData.map((file: any, index: any) => (
                   <TableRow key={index}>
                     <TableCell>
                       <a
